@@ -52,10 +52,6 @@ function! s:restore_buffer(info) " {{{
   execute 'let &l:number=' . a:info['number']
   execute 'let &l:previewwindow=' . a:info['previewwindow']
   call winrestview(a:info['winview'])
-
-  if a:info['previewwindow']
-    echo bufname(a:info['bufnr']) . ' is a preview window'
-  endif
 endfunction " }}}
 
 function! swap_buffers#swap(dir) " {{{
