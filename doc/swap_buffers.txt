@@ -9,7 +9,7 @@ CONTENTS                                                  *swap-buffers-contents
 ===============================================================================
 1. Description                                         *swap-buffers-description*
 
-|Swap-buffers| is a plugin, which provides a function to swap the buffers from
+|swap-buffers| is a plugin, which provides a function to swap the buffers from
 two adjacent windows.
 
 ===============================================================================
