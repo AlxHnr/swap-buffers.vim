@@ -33,12 +33,14 @@ let s:directions = { 'left': 'h', 'down': 'j', 'up': 'k', 'right': 'l' }
 function! s:prepare_buffer() " {{{
   let l:restore_info =
     \ {
-    \   'bufnr'     : bufnr('%'),
-    \   'bufhidden' : &l:bufhidden,
-    \   'number'    : &l:number,
-    \   'winview'   : winsaveview(),
+    \   'bufnr'         : bufnr('%'),
+    \   'bufhidden'     : &l:bufhidden,
+    \   'number'        : &l:number,
+    \   'previewwindow' : &l:previewwindow,
+    \   'winview'       : winsaveview(),
     \ }
   setlocal bufhidden=
+  setlocal nopreviewwindow
   return l:restore_info
 endfunction " }}}
 
@@ -48,7 +50,12 @@ function! s:restore_buffer(info) " {{{
   execute 'hide buffer ' . a:info['bufnr']
   execute 'setlocal bufhidden=' . a:info['bufhidden']
   execute 'let &l:number=' . a:info['number']
+  execute 'let &l:previewwindow=' . a:info['previewwindow']
   call winrestview(a:info['winview'])
+
+  if a:info['previewwindow']
+    echo bufname(a:info['bufnr']) . ' is a preview window'
+  endif
 endfunction " }}}
 
 function! swap_buffers#swap(dir) " {{{
