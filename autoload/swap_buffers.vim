@@ -27,6 +27,30 @@ endif
 
 let s:directions = { 'left': 'h', 'down': 'j', 'up': 'k', 'right': 'l' }
 
+" Sets various local variables in the current buffer, and returns a
+" dictionary which can be used to restore these variables again. See
+" 's:restore_buffer()'.
+function! s:prepare_buffer() " {{{
+  let l:restore_info =
+    \ {
+    \   'bufnr'     : bufnr('%'),
+    \   'bufhidden' : &l:bufhidden,
+    \   'number'    : &l:number,
+    \   'winview'   : winsaveview(),
+    \ }
+  setlocal bufhidden=
+  return l:restore_info
+endfunction " }}}
+
+" The counterpart to 's:prepare_buffer()'. Takes a dictionary as argument
+" and restores various local variables.
+function! s:restore_buffer(info) " {{{
+  execute 'hide buffer ' . a:info['bufnr']
+  execute 'setlocal bufhidden=' . a:info['bufhidden']
+  execute 'let &l:number=' . a:info['number']
+  call winrestview(a:info['winview'])
+endfunction " }}}
+
 function! swap_buffers#swap(dir) " {{{
   if !has_key(s:directions, a:dir)
     echoerr "swap-buffers.vim: invalid direction: '" . a:dir . "'."
@@ -34,21 +58,18 @@ function! swap_buffers#swap(dir) " {{{
   endif
 
   let l:prev_winnr = winnr()
-  let l:prev_view = winsaveview()
+  let l:prev_info = s:prepare_buffer()
   execute 'normal! ' . s:directions[a:dir]
 
+  " Return if there is no neighbor window.
   if winnr() == l:prev_winnr
+    call s:restore_buffer(l:prev_info)
     return
   endif
 
-  let l:new_bufnr = bufnr('%')
-  let l:new_view = winsaveview()
-
-  execute 'hide buffer ' . winbufnr(l:prev_winnr)
-  call winrestview(l:prev_view)
+  let l:next_info = s:prepare_buffer()
+  call s:restore_buffer(l:prev_info)
   normal! p
-
-  execute 'hide buffer ' . l:new_bufnr
-  call winrestview(l:new_view)
+  call s:restore_buffer(l:next_info)
   normal! p
 endfunction " }}}
