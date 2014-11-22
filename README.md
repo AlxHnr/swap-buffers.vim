@@ -4,6 +4,8 @@ This Vim plugin provides a function to swap the current buffer with the
 buffer in a neighbor window: **swap\_buffers#swap()**. It takes exactly one
 argument, which must be either "left", "right", "up" or "down".
 
+![preview.gif](https://raw.github.com/AlxHnr/swap-buffers.vim/master/preview.gif)
+
 Here is an example, which maps this function to control and one of the
 direction keys.
 
