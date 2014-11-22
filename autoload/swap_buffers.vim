@@ -33,11 +33,13 @@ let s:directions = { 'left': 'h', 'down': 'j', 'up': 'k', 'right': 'l' }
 function! s:prepare_buffer() " {{{
   let l:restore_info =
     \ {
-    \   'bufnr'         : bufnr('%'),
-    \   'bufhidden'     : &l:bufhidden,
-    \   'number'        : &l:number,
-    \   'previewwindow' : &l:previewwindow,
-    \   'winview'       : winsaveview(),
+    \   'bufnr'          : bufnr('%'),
+    \   'bufhidden'      : &l:bufhidden,
+    \   'number'         : &l:number,
+    \   'wrap'           : &l:wrap,
+    \   'relativenumber' : &l:relativenumber,
+    \   'previewwindow'  : &l:previewwindow,
+    \   'winview'        : winsaveview(),
     \ }
   setlocal bufhidden=
   setlocal nopreviewwindow
@@ -50,6 +52,8 @@ function! s:restore_buffer(info) " {{{
   execute 'hide buffer ' . a:info['bufnr']
   execute 'setlocal bufhidden=' . a:info['bufhidden']
   execute 'let &l:number=' . a:info['number']
+  execute 'let &l:wrap=' . a:info['wrap']
+  execute 'let &l:relativenumber=' . a:info['relativenumber']
   execute 'let &l:previewwindow=' . a:info['previewwindow']
   call winrestview(a:info['winview'])
 endfunction " }}}
